@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Web Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            padding: 20px;
+            text-align: center;
+        }
+        .button {
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .button:hover {
+            transform: scale(1.1);
+            background-color: #0056b3;
+        }
+        .card {
+            background-color: white;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .preference-panel {
+            margin: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+        }
+        .preference-panel select {
+            padding: 5px;
+            margin-left: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Interactive Web Demo</h1>
+        <button class="button" onclick="toggleCard()">Toggle Card</button>
+        <button class="button" onclick="animateCard()">Animate Card</button>
+        <div class="preference-panel">
+            <label for="theme">Choose Theme: </label>
+            <select id="theme" onchange="savePreference()">
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+            </select>
+        </div>
+        <div class="card" id="demoCard">
+            <h2>Dynamic Card</h2>
+            <p>This card demonstrates CSS transitions and JavaScript animations with local storage for user preferences.</p>
+        </div>
+    </div>
+
+    <script>
+        // Load user preferences from localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.getElementById('theme').value = theme;
+            applyTheme(theme);
+        });
+
+        // Save user preferences to localStorage
+        function savePreference() {
+            const theme = document.getElementById('theme').value;
+            localStorage.setItem('theme', theme);
+            applyTheme(theme);
+        }
+
+        // Apply theme based on user preference
+        function applyTheme(theme) {
+            document.body.style.backgroundColor = theme === 'dark' ? '#333' : '#f0f0f0';
+            document.querySelector('.card').style.backgroundColor = theme === 'dark' ? '#444' : 'white';
+            document.querySelector('.card').style.color = theme === 'dark' ? 'white' : 'black';
+        }
+
+        // Toggle card visibility
+        function toggleCard() {
+            const card = document.getElementById('demoCard');
+            card.classList.toggle('visible');
+        }
+
+        // Animate card with JavaScript
+        function animateCard() {
+            const card = document.getElementById('demoCard');
+            card.style.transition = 'none';
+            card.style.transform = 'translateY(0) rotate(0deg)';
+            setTimeout(() => {
+                card.style.transition = 'transform 0.5s ease';
+                card.style.transform = 'translateY(-20px) rotate(5deg)';
+                setTimeout(() => {
+                    card.style.transform = 'translateY(0) rotate(0deg)';
+                }, 500);
+            }, 50);
+        }
+    </script>
+</body>
+</html>
